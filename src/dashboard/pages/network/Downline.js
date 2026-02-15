@@ -1,0 +1,165 @@
+import moment from "moment";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import CustomTable from "../../../Shared/CustomTable";
+import { apiConnectorGet } from "../../../utils/APIConnector";
+import { endpoint } from "../../../utils/APIRoutes";
+import { MenuItem, Select } from "@mui/material";
+
+const Downline = () => {
+  const [level, setLevel] = useState(1);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState("");
+  const [searchTrigger, setSearchTrigger] = useState(0);
+
+  const { data: team_data, isLoading } = useQuery(
+    ["team_api_referral", level, searchTrigger],
+    () =>
+      apiConnectorGet(
+        `${endpoint?.team_data_api}?level=${limit || level}&page=${page}`
+      ),
+    {
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      retryOnMount: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+  const data = team_data?.data?.result || [];
+
+  const handleLevelChange = (newLevel) => {
+    setLevel(newLevel);
+  };
+  const tablehead = [
+    <span>S.No.</span>,
+    <span>Login Id</span>,
+    <span>Level</span>,
+    <span>TopUp Amount ($)</span>,
+    // <span>Last Week Business</span>,
+    <span>TopUp Date</span>,
+  ];
+  const tablerow = data?.map((row, index) => {
+    return [
+      <span> {index + 1}</span>,
+      <span>{row.lgn_cust_id}</span>,
+      <span>{row.level || "N/A"}</span>,
+      <span>{row.jnr_topup_wallet || "N/A"}</span>,
+      // <span>{row.last_week_buss}</span>,
+      <span>
+        {row.jnr_topup_date
+          ? moment(row.jnr_topup_date)?.format("DD-MM-YYYY")
+          : "--"}
+      </span>,
+    ];
+  });
+  return (
+    <div className="p-2">
+      {/* Heading */}
+      <h2
+        className="
+        text-xl font-semibold mb-4 text-gray-200
+        px-4 py-2 rounded-md
+        bg-black
+        shadow-md shadow-white/30 text-center
+      "
+      >
+        Total Downline Team
+      </h2>
+
+      {/* Controls + Stats */}
+      {/* <div
+        className="
+        bg-black rounded-lg
+        border border-gray-700
+        p-4 mb-4
+        shadow-md shadow-white/20
+        text-white
+      "
+      >
+        <div className="mb-4">
+          <p className="text-text-color mb-2 text-sm">
+            {localStorage.getItem("isCP") === "Yes" ? "Enter" : "Select"} Level:
+          </p> */}
+
+      {/* <div className="flex flex-col md:flex-row gap-3">
+            {localStorage.getItem("isCP") === "No" ? ( */}
+      <Select
+        value={level}
+        onChange={(e) => handleLevelChange(Number(e.target.value))}
+        className=" rounded w-full md:w-1/2 !bg-black !text-white"
+        size="small"
+      >
+        {[...Array(10)].map((_, index) => (
+          <MenuItem key={index} value={index + 1}>
+            Level {index + 1}
+          </MenuItem>
+        ))}
+      </Select>
+      {/* ) : (
+              <input
+                type="number"
+                placeholder="Enter Level"
+                value={limit}
+                onChange={(e) => setLimit(e.target.value)}
+                className="px-4 py-2 rounded w-full md:w-1/2 bg-white text-black"
+              />
+            )}
+
+            {localStorage.getItem("isCP") === "Yes" && (
+              <Button
+                onClick={() => setSearchTrigger((prev) => prev + 1)}
+                size="small"
+                variant="contained"
+                className="md:self-center"
+              >
+                Search
+              </Button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap justify-between text-sm">
+          <p>
+            Total Count:{" "}
+            <span className="text-gold-color font-bold">
+              {data?.length || 0}
+            </span>
+          </p>
+
+          <p>
+            Total Buss:{" "}
+            <span className="text-gold-color font-bold">
+              {data
+                ?.reduce((a, b) => a + Number(b?.jnr_topup_wallet || 0), 0)
+                ?.toFixed(2)}
+              $
+            </span>
+          </p>
+        </div>
+      </div> */}
+
+      {/* Table Section */}
+      <div
+        className="
+        rounded-lg py-3
+        text-white
+        bg-black
+        border border-gray-700
+        shadow-md shadow-white/20
+      "
+      >
+        <CustomTable
+          tablehead={tablehead}
+          tablerow={tablerow}
+          isLoading={isLoading}
+        />
+
+        {/* Pagination (optional) */}
+        {/* <CustomToPagination page={page} setPage={setPage} data={allData} /> */}
+      </div>
+    </div>
+  );
+};
+
+export default Downline;
