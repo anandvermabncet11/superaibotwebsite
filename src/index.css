@@ -224,3 +224,42 @@ code {
   padding: 10px 15px !important;
   white-space: nowrap;
 }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+.animate-typing {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typing 3s steps(40) forwards;
+}
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.animate-shimmer {
+    background: linear-gradient(90deg, currentColor 0%, rgba(255,255,255,0.5) 50%, currentColor 100%);
+    background-size: 1000px 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shimmer 3s infinite;
+}

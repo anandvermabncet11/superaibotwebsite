@@ -1,4 +1,3 @@
-import { Refresh } from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,8 +16,8 @@ import toast from "react-hot-toast";
 import { swalObj } from "../utils/Swal";
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const [walletAddress, setWalletAddress] = useState(null);
-  const [walletAddressArray, setwalletAddressArray] = useState([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [searchParams] = useSearchParams();
   const referral_id = searchParams.get("startapp") || null;
 
@@ -29,50 +28,17 @@ const Login = () => {
   const datatele = {
     id: referral_id,
   };
-  useEffect(() => {
-    requestAccount();
-  }, []);
-  async function requestAccount() {
-    setLoading(true);
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x38" }], // Chain ID for Binance Smart Chain Mainnet
-        });
-        const userAccount = accounts[0];
-        setWalletAddress(userAccount);
-        setwalletAddressArray(accounts);
-      } catch (error) {
-        Swal.fire({
-          text: "Error connecting..." + error,
-          confirmButtonColor: "black",
-        });
-        // alert("Error connecting...", error);
-      }
-    } else {
-      Swal.fire({
-        text: "Wallet not detected.",
 
-        confirmButtonColor: "black",
-      });
-      // alert("Wallet not detected.");
-    }
-    setLoading(false);
-  }
 
   const loginFn = async (reqBody) => {
     setLoading(true);
     const reqBodyy = {
-      mobile: String(walletAddress)?.toLocaleLowerCase(),
-      email: String(walletAddress)?.toLocaleLowerCase(),
+      mobile: String(email)?.toLocaleLowerCase(),
+      email: String(email)?.toLocaleLowerCase(),
       full_name: String("N/A"),
       referral_id: String(datatele?.id),
-      username: String(walletAddress)?.toLocaleLowerCase(),
-      password: String(walletAddress)?.toLocaleLowerCase(),
+      username: String(email)?.toLocaleLowerCase(),
+      password: String(password),
     };
     // const reqBodyy = {
     //   mobile: String("9876543210"),
@@ -145,18 +111,7 @@ const Login = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if (walletAddress) {
-      // alert("ID: " + walletAddress);
-      Swal.fire(swalObj(walletAddress));
-      if (
-        String(uid)?.toLocaleLowerCase() ==
-        String(walletAddress || "")?.toLocaleLowerCase()
-      ) {
-        // navigate("/home");
-      }
-    }
-  }, [walletAddress]);
+  // no wallet-related side-effects anymore
   return (
     <>
       <Loader isLoading={loading} />
@@ -223,7 +178,7 @@ const Login = () => {
                 <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-400 to-blue-500 text-3xl font-bold mb-3 tracking-wide">
                   Welcome Back
                 </h2>
-                <p className="text-gray-300 text-base">Connect your wallet to continue your journey</p>
+                <p className="text-gray-300 text-base">Sign in with your email and password to continue</p>
 
                 {/* Enhanced decorative divider */}
                 <div className="flex items-center justify-center gap-3 mt-6">
@@ -233,74 +188,22 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* Enhanced Wallet Address Selection */}
+              {/* Email / Password Inputs */}
               <div className="mb-8 space-y-4">
-                {/* Connect Button */}
-                <button
-                  onClick={requestAccount}
-                  className="relative w-full py-4 rounded-2xl font-bold text-base overflow-hidden group transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  {/* Button background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 bg-size-200 bg-pos-0 group-hover:bg-pos-100 transition-all duration-700"></div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600/80 via-blue-600/80 to-cyan-600/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                  {/* Button glow */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 group-hover:opacity-60 transition-opacity duration-500 blur-xl rounded-2xl"></div>
-
-                  {/* Button content */}
-                  <span className="relative z-10 flex items-center justify-center gap-3 text-white">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    Connect with Dapp
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-
-                  {/* Shine effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 translate-x-[-300%] group-hover:translate-x-[300%] transition-transform duration-1000"></div>
-                  </div>
-                </button>
-
-                {/* Wallet Address Display */}
-                {walletAddress && (
-                  <div className="relative group animate-fadeIn">
-                    {/* Address container glow */}
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-green-400/30 via-cyan-400/30 to-green-400/30 rounded-xl blur-sm group-hover:blur-md transition-all duration-300"></div>
-
-                    {/* Address container */}
-                    <div className="relative bg-gradient-to-r from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-sm border border-green-400/40 rounded-xl p-4 group-hover:border-green-400/60 transition-all duration-300">
-                      <div className="flex items-center gap-3">
-                        {/* Status indicator */}
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
-                          <span className="text-green-300 text-xs font-semibold">CONNECTED</span>
-                        </div>
-                      </div>
-
-                      {/* Address text */}
-                      <div className="mt-2">
-                        <p className="text-slate-300 text-xs mb-1 font-medium">Wallet Address:</p>
-                        <p className="text-cyan-300 text-sm font-mono break-all bg-slate-900/50 rounded-lg px-3 py-2 border border-slate-600/50">
-                          {walletAddress}
-                        </p>
-                      </div>
-
-                      {/* Copy button */}
-                      <button
-                        onClick={() => navigator.clipboard.writeText(walletAddress)}
-                        className="mt-3 flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-xs font-medium transition-colors duration-200"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                        Copy Address
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email ID"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-700 text-sm text-gray-100 placeholder-gray-500 focus:outline-none"
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-700 text-sm text-gray-100 placeholder-gray-500 focus:outline-none"
+                />
               </div>
 
               {/* Enhanced Info Box */}
@@ -313,7 +216,7 @@ const Login = () => {
                 <div>
                   <h4 className="text-blue-200 font-semibold text-sm mb-1">Secure Connection</h4>
                   <p className="text-blue-300/80 text-xs leading-relaxed">
-                    Connect your Web3 wallet address from the above button to securely access your account using blockchain technology.
+                    Use your email and password to securely access your account.
                   </p>
                 </div>
               </div>
@@ -321,7 +224,7 @@ const Login = () => {
               {/* Enhanced Login Button */}
               <button
                 onClick={loginFn}
-                disabled={!walletAddress}
+                disabled={!email || !password}
                 className="relative w-full py-5 rounded-2xl font-bold text-lg overflow-hidden group transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mb-8"
               >
                 {/* Enhanced button background */}

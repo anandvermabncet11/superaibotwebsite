@@ -4,8 +4,11 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "../src/index.css";
 import "./App.css";
 
-// import Login from "./authentication/login";
+import Login from "./authentication/login";
 import Registration from "./authentication/Registration";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import CookiePolicy from "./pages/CookiePolicy";
 import BuyBot from "./dashboard/BuyBot";
 import { routes } from "./routes/Routes";
 import { adminroutes } from "./AdminRoutes";
@@ -25,12 +28,15 @@ const App = () => {
       <Routes>
         {/* Public Routes */}
         {/* <Route path="/" element={<BuyBot />} /> */}
-        <Route path="/" element={<IFCTrade />} />
-        {/* <Route path="/" element={<Website />} /> */}
+        {/* <Route path="/" element={<IFCTrade />} /> */}
+        <Route path="/" element={<Website />} />
         <Route path="/home" element={<Home />} />
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Registration />} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Registration />} />
         <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
         {/* //admin */}
         <Route path="/adminlogin" element={<LogIn />} />
 
