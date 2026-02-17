@@ -25,33 +25,48 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import BarChartIcon from "@mui/icons-material/BarChart";
 const menu = [
   { title: "Dashboard", icon: <HomeIcon />, path: "/dashboard" },
-  { title: "Top Up", icon: <DashboardIcon />, path: "/topup_data" },
-  { title: "Top Up Report", icon: <PhotoAlbumIcon />, path: "/activation" },
+  // { title: "Top Up", icon: <DashboardIcon />, path: "/topup_data" },
+  // { title: "Top Up Report", icon: <PhotoAlbumIcon />, path: "/activation" },
   { title: "Direct Team", icon: <PersonIcon />, path: "/referral" },
   { title: "Downline Team", icon: <PersonAddAlt1Icon />, path: "/downline" },
   // { title: "Profit Ratio", icon: <FaChartLine />, path: "/profit" },
+  // {
+  //   title: "Booster Income",
+  //   icon: <CurrencyExchangeIcon />,
+  //   path: "/income/roi",
+  // },
   {
-    title: "Booster Income",
-    icon: <CurrencyExchangeIcon />,
-    path: "/income/roi",
-  },
-  {
-    title: "Referral Income",
+    title: "Referral Bonus",
     icon: <SignalCellularAltIcon />,
     path: "/income/direct",
   },
 
   {
-    title: "Roi on Roi",
+    title: "Level Bonus",
     icon: <CurrencyExchangeIcon />,
-    path: "/income/roi-on-roi",
+    path: "/income/level",
   },
   {
-    title: "Withdrawal",
-    icon: <AccountBalanceWalletIcon />,
-    path: "/with",
+    title: "ROI Bonus",
+    icon: <CurrencyExchangeIcon />,
+    path: "/income/roi",
   },
-  { title: "Wallet Report", icon: <BarChartIcon />, path: "/withdrawal" },
+  {
+    title: "Reward Bonus",
+    icon: <CurrencyExchangeIcon />,
+    path: "/income/reward",
+  },
+  {
+    title: "Salary Bonus",
+    icon: <CurrencyExchangeIcon />,
+    path: "/income/salary",
+  },
+  // {
+  //   title: "Withdrawal",
+  //   icon: <AccountBalanceWalletIcon />,
+  //   path: "/with",
+  // },
+  // { title: "Wallet Report", icon: <BarChartIcon />, path: "/withdrawal" },
 ];
 
 const Sidebar = () => {

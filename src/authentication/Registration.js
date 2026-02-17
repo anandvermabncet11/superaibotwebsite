@@ -1,19 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import {
-  saveToken,
-  saveUid,
-  saveUserCP,
-  saveUsername,
-} from "../redux/slices/counterSlice";
+import logo from "../assets/logo.png";
 import Loader from "../Shared/Loader";
 import { endpoint } from "../utils/APIRoutes";
-import logo from "../assets/logo.png";
-import toast from "react-hot-toast";
-import { swalObj } from "../utils/Swal";
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
@@ -23,7 +16,7 @@ const Registration = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
-  const [invitationcode, setInvitationcode] = useState("");
+  // const [invitationcode, setInvitationcode] = useState("");
   const [sponsername, setSponsername] = useState("");
   const [searchParams] = useSearchParams();
   const referral_id = searchParams.get("startapp") || null;
@@ -31,10 +24,7 @@ const Registration = () => {
   // const params = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { logindataen, uid } = useSelector((state) => state.aviator);
-  const datatele = {
-    id: referral_id,
-  };
+
 
 
   const loginFn = async (reqBody) => {
@@ -50,24 +40,12 @@ const Registration = () => {
       mobile: String(mobile)?.toLocaleLowerCase(),
       email: String(email)?.toLocaleLowerCase(),
       full_name: `${firstname} ${lastname}`.trim() || "N/A",
-      referral_id: String(datatele?.id) || String(invitationcode),
-      username: String(email)?.toLocaleLowerCase(),
+      referral_id: String(referral_id),
       password: String(password),
-      sponsername: String(sponsername),
-      invitationcode: String(invitationcode),
     };
-    // const reqBodyy = {
-    //   mobile: String("9876543210"),
-    //   email: String("9876543210"),
-    //   full_name: String(datatele?.username||"N/A"),
-    //   referral_id: String("9876543210"),
-    //   username: String("9876543210"),
-    //   password: String("9876543210"),
-    // };
 
     try {
-      console.log("hii")
-      const response = await axios.post(endpoint?.login_api, reqBodyy, {
+      const response = await axios.post(endpoint?.registration_api, reqBodyy, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -75,52 +53,78 @@ const Registration = () => {
       });
 
       setLoading(false);
-      if (response?.data?.message === "Credential not found in our record") {
-        return;
-      }
-      if (response?.data?.message === "Login Successfully") {
-        dispatch(saveUid(reqBodyy?.mobile));
-        dispatch(saveToken(response?.data?.result?.[0]?.token));
-        dispatch(saveUsername(reqBodyy?.username));
-        dispatch(saveUserCP(response?.data?.result?.[0]?.isCP));
-        localStorage.setItem("logindataen", response?.data?.result?.[0]?.token);
-        localStorage.setItem("uid", reqBodyy?.mobile);
-        localStorage.setItem("username", reqBodyy?.username);
-        localStorage.setItem("isCP", response?.data?.result?.[0]?.isCP);
 
-        // Swal.fire({
-        //   title: "🎉 Congratulations!",
-        //   html: `
-        //     <p style="font-size:14px; margin-bottom:8px;">${response?.data?.message}</p>
-        //     <p style="font-weight:bold; color:#f39c12; margin:0;">Subscriber Wallet Address</p>
-        //     <p style="font-size:13px; word-break:break-all; color:#16a085; margin-top:4px;">
-        //       ${walletAddress}
-        //     </p>
-        //   `,
-        //   icon: "success",
-        //   confirmButtonColor: "black",
-        // }).then((result) => {
-        //   if (result.isConfirmed) {
-        //     navigate("/home");
-        //     window.location.reload();
-        //   }
-        // });
-        toast(response?.data?.message);
-        navigate("/dashboard");
-        window.location.reload();
+      if (response?.data?.success) {
+        // dispatch(saveUid(reqBodyy?.mobile));
+        // dispatch(saveToken(response?.data?.result?.[0]?.token));
+        // dispatch(saveUsername(reqBodyy?.username));
+        // dispatch(saveUserCP(response?.data?.result?.[0]?.isCP));
+        // localStorage.setItem("logindataen", response?.data?.result?.[0]?.token);
+        // localStorage.setItem("uid", reqBodyy?.mobile);
+        // localStorage.setItem("username", reqBodyy?.username);
+        // localStorage.setItem("isCP", response?.data?.result?.[0]?.isCP);
+
+        Swal.fire({
+          title: "🎉 Congratulations!",
+          html: `
+            <p style="font-size:14px; margin-bottom:8px;">${response?.data?.message}</p>
+            <p style="font-size:12px; color:#555;">Your account has been successfully created. You can now login to your account.</p>
+
+          `,
+          icon: "success",
+          confirmButtonColor: "black",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/login");
+            window.location.reload();
+          }
+        });
+        // toast(response?.data?.message);
+        // navigate("/dashboard");
+        // window.location.reload();
       } else {
-        // Swal.fire({
-        //   text: response?.data?.message,
-
-        //   confirmButtonColor: "black",
-        // });
-        toast(response?.data?.message);
+        Swal.fire({
+          text: response?.data?.message,
+          icon: "warning",
+          confirmButtonColor: "black",
+        });
+        // toast(response?.data?.message);
       }
     } catch (error) {
       toast("Error during registration.");
       setLoading(false);
     }
   };
+
+
+  const getSponserName = async () => {
+    try {
+      const response = await axios.post(
+        endpoint?.get_spon_name,
+        { customer_id: referral_id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+      if (response?.data?.success) {
+        setSponsername(response?.data?.result?.[0]?.lgn_name);
+      } else {
+        setSponsername("Invalid Sponser");
+      }
+    } catch (error) {
+      setSponsername("Error fetching sponser");
+    }
+  };
+
+  useEffect(() => {
+    if (referral_id) {
+      getSponserName();
+    }
+  }, [referral_id]);
+
   return (
     <>
       <Loader isLoading={loading} />
@@ -148,7 +152,7 @@ const Registration = () => {
         {/* Registration Card */}
         <div className="relative z-10 w-full max-w-md mx-1">
           {/* Enhanced outer glow with multiple layers */}
-          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-violet-500 via-purple-500 to-cyan-400 rounded-3xl opacity-30 blur-xl animate-pulse"></div>
+          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400  via-purple-500 to-cyan-400 rounded-3xl opacity-30 blur-xl animate-pulse"></div>
           <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-400 rounded-3xl opacity-40 blur-lg"></div>
 
           {/* Main card */}
@@ -163,7 +167,7 @@ const Registration = () => {
             <div className="absolute bottom-0 left-0 w-24 h-24 border-b-2 border-l-2 border-gradient-to-tr from-violet-400/20 to-cyan-400/20 rounded-bl-3xl"></div>
 
             {/* Enhanced accent lines */}
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-purple-500 via-violet-500 to-cyan-400 animate-pulse"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400  via-violet-500 to-cyan-400 animate-pulse"></div>
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
 
             {/* Content */}
@@ -243,15 +247,15 @@ const Registration = () => {
                 />
                 <input
                   type="text"
-                  value={invitationcode}
-                  onChange={(e) => setInvitationcode(e.target.value)}
-                  placeholder="Invitation Code (optional)"
+                  value={referral_id}
+                  // onChange={(e) => setInvitationcode(e.target.value)}
+                  placeholder="Invitation Code"
                   className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-600/50 text-slate-200 text-sm placeholder-slate-400 focus:outline-none"
                 />
                 <input
                   type="text"
                   value={sponsername}
-                  onChange={(e) => setSponsername(e.target.value)}
+                  // onChange={(e) => setSponsername(e.target.value)}
                   placeholder="Sponser Name"
                   className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-600/50 text-slate-200 text-sm placeholder-slate-400 focus:outline-none"
                 />
@@ -265,7 +269,7 @@ const Registration = () => {
                   className="relative w-full py-5 rounded-2xl font-bold text-lg overflow-hidden group transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {/* Enhanced button background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-purple-600 via-violet-600 to-cyan-600 bg-size-200 bg-pos-0 group-hover:bg-pos-100 transition-all duration-700 disabled:opacity-50"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-600 via-purple-600  to-cyan-600 bg-size-200 bg-pos-0 group-hover:bg-pos-100 transition-all duration-700 disabled:opacity-50"></div>
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500 opacity-0 group-hover:opacity-90 transition-opacity duration-500"></div>
 
                   {/* Enhanced button glow */}
@@ -303,9 +307,9 @@ const Registration = () => {
 
               {/* Enhanced Divider */}
               <div className="flex items-center gap-4 my-8">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cyan-400/40 via-purple-400/40 to-transparent"></div>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent  via-purple-400/40 to-transparent"></div>
                 <span className="text-slate-400 text-sm font-medium bg-slate-800/50 px-4 py-2 rounded-full border border-slate-600/50">OR</span>
-                <div className="flex-1 h-px bg-gradient-to-l from-transparent via-purple-400/40 via-cyan-400/40 to-transparent"></div>
+                <div className="flex-1 h-px bg-gradient-to-l from-transparent  via-cyan-400/40 to-transparent"></div>
               </div>
 
               {/* Enhanced Login Link */}
@@ -313,7 +317,7 @@ const Registration = () => {
                 <p className="text-slate-300 text-sm">
                   Already have an account?{" "}
                   <span
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/login")}
                     className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-violet-400 font-bold cursor-pointer hover:from-cyan-300 hover:via-purple-300 hover:to-violet-300 transition-all duration-300 inline-flex items-center gap-2 hover:scale-105"
                   >
                     Sign In

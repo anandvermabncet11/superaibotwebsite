@@ -14,6 +14,7 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import CandlestickChartIcon from '@mui/icons-material/CandlestickChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import { getFloatingValue } from "../utils/utilityFun";
 const Card = ({ title, value, color, icon = "dollar" }) => {
   const colors = {
     cyan: {
@@ -190,12 +191,7 @@ const Dashboard = () => {
     }
   );
   const dashboard = dashboard_Api?.data?.result?.[0] || [];
-  const roman = [
-    "I",
-    "II",
-    "III"
-  ]
-  // console.log(dashboard);
+
   return (
     <div className="min-h-screen bg-black text-white px-2 mt-16">
       <Loader isLoading={profileloading || isLoading} />
@@ -219,31 +215,31 @@ const Dashboard = () => {
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
-              <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">Current Slot</p>
+              <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">Fund Wallet</p>
             </div>
 
             <h2 className="text-3xl font-bold mb-1">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-cyan-400 to-cyan-500">
-                Slot {user_profile?.slab_no} - {roman[Math.ceil(Number(user_profile?.slab_no || 0) / 5) - 1]}
+                ${getFloatingValue(user_profile?.tr03_fund_wallet)}
               </span>
             </h2>
 
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-white">
+            {/* <div className="flex items-baseline gap-2">
+              <span className="text-xs font-bold text-white">
                 ${Number(user_profile?.slab_amount || 0)?.toFixed(0)}
               </span>
               <span className="text-xs text-gray-500 font-medium">USD</span>
-            </div>
+            </div> */}
 
             {/* Progress indicator */}
             <div className="mt-4 flex items-center gap-2">
               <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 rounded-full transition-all duration-1000 ease-out shadow-lg shadow-cyan-400/50"
-                  style={{ width: `${(user_profile?.slab_no || 1) * 10}%` }}
+                  style={{ width: `${(user_profile?.tr03_fund_wallet || 1) * 10}%` }}
                 ></div>
               </div>
-              <span className="text-xs text-cyan-400 font-semibold">{(user_profile?.slab_no || 1) * 10}%</span>
+              <span className="text-xs text-cyan-400 font-semibold">{(user_profile?.tr03_fund_wallet || 1) * 10}%</span>
             </div>
           </div>
 
@@ -293,17 +289,17 @@ const Dashboard = () => {
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></div>
-              <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">Remaining Amount</p>
+              <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">Topoup Wallet</p>
             </div>
 
             <h2 className="text-3xl font-bold mb-1">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500">
-                ${(Number(user_profile?.slab_amount || 0) - Number(user_profile?.slab_comp_amount || 0)).toFixed(2)}
+                ${getFloatingValue(user_profile?.tr03_topup_wallet)}
               </span>
             </h2>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-sm text-gray-500 font-medium">For Next Slot</span>
+              <span className="text-sm text-gray-500 font-medium">Your trading amount</span>
             </div>
 
             {/* Progress indicator */}
@@ -312,13 +308,15 @@ const Dashboard = () => {
                 <div
                   className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full transition-all duration-1000 ease-out shadow-lg shadow-yellow-400/50"
                   style={{
-                    width: `${((Number(user_profile?.slab_comp_amount || 0) / Number(user_profile?.slab_amount || 1)) * 100)}%`
+                    width: `${((Number(user_profile?.tr03_topup_wallet || 0) / Number(user_profile?.tr03_topup_wallet || 1)) * 100)}%`
                   }}
                 ></div>
               </div>
               <span className="text-xs text-yellow-400 font-semibold">
-                {((Number(user_profile?.slab_comp_amount || 0) / Number(user_profile?.slab_amount || 1)) * 100).toFixed(0)}%
+                {Number(user_profile?.tr03_topup_wallet || 0) > 0 ? "100%" : "0%"}
               </span>
+
+
             </div>
           </div>
 
@@ -402,18 +400,14 @@ const Dashboard = () => {
                   functionTOCopy(
                     frontend +
                     "/register?startapp=" +
-                    user_profile?.lgn_cust_id +
-                    "&id=" +
-                    user_profile?.lgn_email
+                    user_profile?.lgn_cust_id
                   )
                 }
                 className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 text-sm break-all text-center font-medium cursor-pointer hover:scale-[1.02] transition-transform duration-200 relative z-10"
               >
                 {frontend +
                   "/register?startapp=" +
-                  user_profile?.lgn_cust_id +
-                  "&id=" +
-                  user_profile?.lgn_email}
+                  user_profile?.lgn_cust_id}
               </p>
             </div>
 
@@ -461,10 +455,10 @@ const Dashboard = () => {
 
             {/* Address Section */}
             <div className="text-center">
-              <p className="text-gray-400 text-xs font-medium tracking-wide uppercase mb-2">My Address</p>
+              <p className="text-gray-400 text-xs font-medium tracking-wide uppercase mb-2">My Customer ID</p>
               <div className="bg-gradient-to-r from-blue-950/20 to-blue-900/10 rounded-lg p-3 border border-blue-400/10 backdrop-blur-sm">
                 <p className="text-blue-400 text-sm break-all font-medium">
-                  {user_profile?.lgn_email}
+                  {user_profile?.lgn_cust_id || "N/A"}
                 </p>
               </div>
             </div>
@@ -485,64 +479,64 @@ const Dashboard = () => {
       {/* ===== GRID ===== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-6 gap-x-4">
         <Card
-          title="Total Deposit"
-          value={`${Number(user_profile?.topup_amount || 0)?.toFixed(2)}`}
+          title="Current Wallet Balance"
+          value={`$${getFloatingValue(user_profile?.tr03_inc_wallet)}`}
           color="cyan"
         />
         <Card
-          title="ROI Capping"
-          value={`$${Number(user_profile?.topup_amount || 0) * 2}`}
+          title="Referral Bonus"
+          value={`$${getFloatingValue(dashboard?.referral_income)}`}
           color="red"
         />
         {/* <Card title="Total Capping" value="3X" color="green" /> */}
         {/* <Card title="Profit Ratio" value="$ 0" color="yellow" /> */}
 
         <Card
-          title="Level Income"
-          value={`${Number(dashboard?.level || 0)?.toFixed(2)}`}
+          title="Level Bonus"
+          value={`$${getFloatingValue(dashboard?.level_bonus || 0)}`}
           color="cyan"
         />
         <Card
-          title="Booster Income"
-          value={`${Number(dashboard?.total_roi_income || 0)?.toFixed(2)}`}
+          title="ROI Bonus"
+          value={`$${getFloatingValue(dashboard?.roi_bonus || 0)}`}
           color="cyan"
         />
         <Card
-          title="ROI on ROI"
-          value={`${Number(dashboard?.total_roi_on_roi_income || 0)?.toFixed(2)}`}
+          title="Reward Bonus"
+          value={`$${getFloatingValue(dashboard?.reward_bonus || 0)}`}
           color="red"
         />
         <Card
-          title="Total Income"
-          value={`${Number(dashboard?.total_income || 0)?.toFixed(2)}`}
+          title="Salary Bonus"
+          value={`$${getFloatingValue(dashboard?.salary_bonus || 0)}`}
           color="green"
         />
         <Card
-          title="Wallet Balance"
-          value={`${Number(user_profile?.jnr_curr_wallet || 0)?.toFixed(2)}`}
+          title="Total Income"
+          value={`$${getFloatingValue(dashboard?.total_income || 0)}`}
           color="yellow"
         />
 
         {/* <Card title="Total Withdrawal" value="$ 0" color="cyan" icon="user" /> */}
         <Card
-          title="Direct Team"
-          value={user_profile?.jnr_direct_team || 0}
+          title="Direct Member"
+          value={user_profile?.tr03_dir_mem || 0}
           color="red"
         />
         <Card
-          title="Direct Business"
-          value={user_profile?.jnr_direct_business || 0}
+          title="Team Member"
+          value={user_profile?.tr03_team_mem || 0}
           color="green"
           icon="user"
         />
         {/* <Card title="Downline Team" value="0" color="yellow" /> */}
 
-        <Card
+        {/* <Card
           title="Downline Business"
           value={user_profile?.jnr_team_topup_bal || 0}
           color="cyan"
           icon="user"
-        />
+        /> */}
       </div>
     </div>
   );

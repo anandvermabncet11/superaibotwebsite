@@ -4,7 +4,7 @@ import Activation from "../dashboard/pages/Activation";
 import ClaimTopUp from "../dashboard/pages/ClaimTopUp";
 import Fund from "../dashboard/pages/Fund/Fund";
 import FundTransfer from "../dashboard/pages/Fund/Transfer";
-import Booster from "../dashboard/pages/income/Booster";
+import Salary from "../dashboard/pages/income/Salary";
 import Direct from "../dashboard/pages/income/Direct";
 import Level from "../dashboard/pages/income/Level";
 import Rank from "../dashboard/pages/income/Rank";
@@ -84,10 +84,10 @@ export const routes = [
     ),
   },
   {
-    path: "/income/booster",
+    path: "/income/salary",
     element: (
       <MainLayout>
-        <Booster />{" "}
+        <Salary />{" "}
       </MainLayout>
     ),
   },

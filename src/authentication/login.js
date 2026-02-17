@@ -33,10 +33,8 @@ const Login = () => {
   const loginFn = async (reqBody) => {
     setLoading(true);
     const reqBodyy = {
-      mobile: String(email)?.toLocaleLowerCase(),
-      email: String(email)?.toLocaleLowerCase(),
-      full_name: String("N/A"),
-      referral_id: String(datatele?.id),
+
+      lgn_type: 2,
       username: String(email)?.toLocaleLowerCase(),
       password: String(password),
     };
@@ -59,47 +57,39 @@ const Login = () => {
       // console.log(response?.data);
       // toast(response?.data?.message);
       setLoading(false);
-      if (response?.data?.message === "Credential not found in our record") {
-        // setOpenDialogBox(true);
-        return;
-      }
-      if (response?.data?.message === "Login Successfully") {
-        dispatch(saveUid(reqBodyy?.mobile));
+      if (response?.data?.success) {
+        // dispatch(saveUid(reqBodyy?.mobile));
         dispatch(saveToken(response?.data?.result?.[0]?.token));
-        dispatch(saveUsername(reqBodyy?.username));
-        dispatch(saveUserCP(response?.data?.result?.[0]?.isCP));
+        // dispatch(saveUsername(reqBodyy?.username));
+        // dispatch(saveUserCP(response?.data?.result?.[0]?.isCP));
         localStorage.setItem("logindataen", response?.data?.result?.[0]?.token);
-        localStorage.setItem("uid", reqBodyy?.mobile);
-        localStorage.setItem("username", reqBodyy?.username);
-        localStorage.setItem("isCP", response?.data?.result?.[0]?.isCP);
+        // localStorage.setItem("uid", reqBodyy?.mobile);
+        localStorage.setItem("user_type", response?.data?.result?.[0]?.user_type);
+        // localStorage.setItem("isCP", response?.data?.result?.[0]?.isCP);
 
-        // Swal.fire({
-        //   title: "🎉 Congratulations!",
-        //   html: `
-        //     <p style="font-size:14px; margin-bottom:8px;">${response?.data?.message}</p>
-        //     <p style="font-weight:bold; color:#f39c12; margin:0;">Subscriber Wallet Address</p>
-        //     <p style="font-size:13px; word-break:break-all; color:#16a085; margin-top:4px;">
-        //       ${walletAddress}
-        //     </p>
-        //   `,
-        //   icon: "success",
-        //   confirmButtonColor: "black",
-        // }).then((result) => {
-        //   if (result.isConfirmed) {
-        //     navigate("/dashboard");
-        //     window.location.reload();
-        //   }
-        // });
-        toast(response?.data?.message);
-        navigate("/dashboard");
-        window.location.reload();
+        Swal.fire({
+          title: "🎉 Congratulations!",
+          html: `
+            <p style="font-size:14px; margin-bottom:8px;">${response?.data?.message}</p>
+          `,
+          icon: "success",
+          confirmButtonColor: "black",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/dashboard");
+            window.location.reload();
+          }
+        });
+        // toast(response?.data?.message);
+        // navigate("/dashboard");
+        // window.location.reload();
       } else {
-        // Swal.fire({
-        //   text: response?.data?.message,
-
-        //   confirmButtonColor: "black",
-        // });
-        toast(response?.data?.message);
+        Swal.fire({
+          text: response?.data?.message,
+          icon: "warning",
+          confirmButtonColor: "black",
+        });
+        // toast(response?.data?.message);
       }
     } catch (error) {
       toast.error("Error during login.");

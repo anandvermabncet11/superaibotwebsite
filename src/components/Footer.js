@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/tradeforyou.png';
-const Footer = ({ darkMode }) => {
+const Footer = ({ darkMode, faq }) => {
     const navigate = useNavigate();
 
     const scrollToTopAndNavigate = (path) => {
@@ -39,7 +39,14 @@ const Footer = ({ darkMode }) => {
                             <li><button onClick={() => scrollToTopAndNavigate('/privacy-policy')} className={`${darkMode ? 'text-gray-400 hover:text-purple-500' : 'text-gray-300 hover:text-purple-400'} transition`}>Privacy Policy</button></li>
                             <li><button onClick={() => scrollToTopAndNavigate('/terms-and-conditions')} className={`${darkMode ? 'text-gray-400 hover:text-purple-500' : 'text-gray-300 hover:text-purple-400'} transition`}>Terms of Service</button></li>
                             <li><button onClick={() => scrollToTopAndNavigate('/cookie-policy')} className={`${darkMode ? 'text-gray-400 hover:text-purple-500' : 'text-gray-300 hover:text-purple-400'} transition`}>Cookie Policy</button></li>
-                            <li><a href="#" className={`${darkMode ? 'text-gray-400 hover:text-purple-500' : 'text-gray-300 hover:text-purple-400'} transition`}>FAQ</a></li>
+                            <li><a href="#" className={`${darkMode ? 'text-gray-400 hover:text-purple-500' : 'text-gray-300 hover:text-purple-400'} transition`}
+
+                                onClick={(e) => {
+                                    if (faq) {
+                                        e.preventDefault();
+                                        faq.current?.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}>FAQ</a></li>
                         </ul>
                     </div>
                     <div className="sm:text-center">

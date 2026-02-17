@@ -33,7 +33,9 @@ const Header = ({ darkMode, setDarkMode, mobileMenuOpen, setMobileMenuOpen }) =>
                         </button>
 
                         {/* Sign In Button */}
-                        <button className="hidden md:block px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+                        <button
+                            onClick={() => naqigate("/login")}
+                            className="hidden md:block px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
                             SIGN IN
                         </button>
 
@@ -54,7 +56,9 @@ const Header = ({ darkMode, setDarkMode, mobileMenuOpen, setMobileMenuOpen }) =>
                         <a href="#about" className="block hover:text-purple-500 transition">ABOUT US</a>
                         <a href="#solutions" className="block hover:text-purple-500 transition">OUR SOLUTIONS</a>
                         <a href="#contact" className="block text-purple-500">CONTACT</a>
-                        <button className="w-full px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold">
+                        <button className="w-full px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold"
+                            onClick={() => naqigate("/login")}
+                        >
                             SIGN IN
                         </button>
                     </div>

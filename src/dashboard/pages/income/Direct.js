@@ -64,7 +64,7 @@ const Direct = () => {
         shadow-md shadow-white/30 text-center
       "
       >
-        Referral Income
+        Referral Bonus
       </h2>
 
       {/* <div

@@ -16,7 +16,7 @@ const MainLayout = ({ children }) => {
   // Navigation items
   const navItems = [
     { label: "Home", icon: <HomeIcon />, path: "/dashboard" },
-    { label: "Activation", icon: <AccountBalanceWalletIcon />, path: "/topup_data" },
+    // { label: "Activation", icon: <AccountBalanceWalletIcon />, path: "/topup_data" },
     { label: "Reports", icon: <BarChartIcon />, path: "/activation" },
     { label: "Referral", icon: <AccountTreeIcon />, path: "/referral" },
   ];
