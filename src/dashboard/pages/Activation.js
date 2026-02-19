@@ -6,6 +6,7 @@ import CustomTable from "../../Shared/CustomTable";
 import CustomToPagination from "../../Shared/Pagination";
 import { useFormik } from "formik";
 import moment from "moment";
+import { formatedDate, getFloatingValue } from "../../utils/utilityFun";
 
 const Activation = () => {
   const [page, setPage] = useState(1);
@@ -30,12 +31,14 @@ const Activation = () => {
       page,
     ],
     () =>
-      apiConnectorPost(endpoint?.topup_data, {
+      apiConnectorPost(endpoint?.get_report_details, {
         search: fk.values.search,
         created_at: fk.values.start_date,
         updated_at: fk.values.end_date,
         page: page,
-        count: "10",
+        count: "1000000000",
+        sub_label: "FUND WALLET",
+        main_label: "IN"
       }),
     {
       keepPreviousData: true,
@@ -46,39 +49,30 @@ const Activation = () => {
     }
   );
 
-  const allData = data?.data?.data || [];
+  const allData = data?.data?.result || [];
 
   const tablehead = [
-    <span>S.No.</span>,
-    <span>Topup Date</span>,
-    <span>Topup Amount ($)</span>,
-    // <span>Hash</span>,
-    <span>Status</span>,
+    "S.No.",
+    "Transaction",
+    "Topup Date",
+    "Topup Amount ($)",
+    "Status",
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
-      <span> {index + 1}</span>,
-      <span>{moment?.utc(row.topup_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
-      <span>{row.topup_pack_amount}</span>,
-      // <span>0xsdfjs45678fhjmnbvf56yuhbvft7ujnbgy7ik</span>,
-      <span
-        className={`${
-          row.topup_roi_status === "INCOMPLETE"
-            ? "text-green-500"
-            : "text-rose-500"
-        }`}
-      >
-        {row.topup_roi_status === "INCOMPLETE"
-          ? "Continue"
-          : row.topup_roi_status}
-      </span>,
+      <span>{index + 1}</span>,
+      <span>{row?.tr07_trans_id}</span>,
+      <span>{formatedDate(moment, row?.tr07_created_at)}</span>,
+      <span>{getFloatingValue(row.tr07_tr_amount)}</span>,
+      <span className="!text-green-600">Success</span>
     ];
   });
+
   return (
     <div className="p-2">
       {/* <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6"> */}
       <h2 className="text-xl font-semibold mb-4 text-gray-200 text-center shadow-md shadow-white/30 px-4 py-2 rounded-md ">
-        Activation Report
+        Fund Deposit History
       </h2>
 
       {/* <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
@@ -130,7 +124,7 @@ const Activation = () => {
         />
 
         {/* Pagination */}
-        {/* <CustomToPagination page={page} setPage={setPage} data={allData} /> */}
+        <CustomToPagination page={page} setPage={setPage} data={allData} />
       </div>
     </div>
   );

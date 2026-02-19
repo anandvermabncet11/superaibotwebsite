@@ -25,10 +25,10 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import BarChartIcon from "@mui/icons-material/BarChart";
 const menu = [
   { title: "Dashboard", icon: <HomeIcon />, path: "/dashboard" },
-  // { title: "Top Up", icon: <DashboardIcon />, path: "/topup_data" },
-  // { title: "Top Up Report", icon: <PhotoAlbumIcon />, path: "/activation" },
-  { title: "Direct Team", icon: <PersonIcon />, path: "/referral" },
-  { title: "Downline Team", icon: <PersonAddAlt1Icon />, path: "/downline" },
+  { title: "Fund Deposit", icon: <DashboardIcon />, path: "/topup_data" },
+  { title: "Deposit History", icon: <PhotoAlbumIcon />, path: "/activation" },
+  { title: "Direct Member", icon: <PersonIcon />, path: "/referral" },
+  { title: "Team Member", icon: <PersonAddAlt1Icon />, path: "/downline" },
   // { title: "Profit Ratio", icon: <FaChartLine />, path: "/profit" },
   // {
   //   title: "Booster Income",

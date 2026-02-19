@@ -2,21 +2,27 @@ import moment from "moment";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import CustomTable from "../../../Shared/CustomTable";
-import { apiConnectorGet } from "../../../utils/APIConnector";
+import { apiConnectorGet, apiConnectorPost } from "../../../utils/APIConnector";
 import { endpoint } from "../../../utils/APIRoutes";
 import { MenuItem, Select } from "@mui/material";
+import CustomToPagination from "../../../Shared/Pagination";
+import { formatedDate, getFloatingValue } from "../../../utils/utilityFun";
 
 const Downline = () => {
   const [level, setLevel] = useState(1);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState("");
+  const [limit, setLimit] = useState(10);
   const [searchTrigger, setSearchTrigger] = useState(0);
 
-  const { data: team_data, isLoading } = useQuery(
-    ["team_api_referral", level, searchTrigger],
+  const { isLoading, data: team_data } = useQuery(
+    ["get_direct_member", level, searchTrigger, page, limit],
     () =>
-      apiConnectorGet(
-        `${endpoint?.team_data_api}?level=${limit || level}&page=${page}`
+      apiConnectorPost(
+        `${endpoint?.team_data_api}`, {
+        level_id: level,
+        page: page,
+        limit: limit
+      }
       ),
     {
       refetchOnMount: false,
@@ -33,23 +39,21 @@ const Downline = () => {
   };
   const tablehead = [
     <span>S.No.</span>,
-    <span>Login Id</span>,
+    <span>Cust Id</span>,
     <span>Level</span>,
     <span>TopUp Amount ($)</span>,
-    // <span>Last Week Business</span>,
+    <span>Join Date</span>,
     <span>TopUp Date</span>,
   ];
-  const tablerow = data?.map((row, index) => {
+  const tablerow = data?.data?.map((row, index) => {
     return [
       <span> {index + 1}</span>,
       <span>{row.lgn_cust_id}</span>,
-      <span>{row.level || "N/A"}</span>,
-      <span>{row.jnr_topup_wallet || "N/A"}</span>,
-      // <span>{row.last_week_buss}</span>,
+      <span>{row.level_id || "N/A"}</span>,
+      <span>{getFloatingValue(row.tr03_topup_wallet)}</span>,
+      <span>{formatedDate(moment, row.tr03_reg_date)}</span>,
       <span>
-        {row.jnr_topup_date
-          ? moment(row.jnr_topup_date)?.format("DD-MM-YYYY")
-          : "--"}
+        {formatedDate(moment, row.tr03_topup_date)}
       </span>,
     ];
   });
@@ -64,7 +68,7 @@ const Downline = () => {
         shadow-md shadow-white/30 text-center
       "
       >
-        Total Downline Team
+        My Team Members
       </h2>
 
       {/* Controls + Stats */}
@@ -156,7 +160,7 @@ const Downline = () => {
         />
 
         {/* Pagination (optional) */}
-        {/* <CustomToPagination page={page} setPage={setPage} data={allData} /> */}
+        <CustomToPagination page={page} setPage={setPage} data={data} />
       </div>
     </div>
   );

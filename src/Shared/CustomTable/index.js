@@ -39,9 +39,9 @@ const CustomTable = ({
                     <th
                       key={index}
                       scope="col"
-                      className="relative px-6 py-4 text-left text-xs font-bold text-cyan-300 uppercase tracking-wider whitespace-nowrap"
+                      className="relative px-6 py-4 text-center text-xs font-bold text-cyan-300 uppercase tracking-wider whitespace-nowrap"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2">
                         {/* Column indicator */}
                         <div className="w-1 h-4 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full"></div>
                         {column}
@@ -113,18 +113,18 @@ const CustomTable = ({
                     className="group border-b border-cyan-400/10 hover:bg-gradient-to-r hover:from-cyan-900/20 hover:via-blue-900/20 hover:to-cyan-900/20 transition-all duration-300 cursor-pointer relative"
                   >
                     {/* Row hover effect */}
-                    <td colSpan={row.length} className="absolute inset-0 p-0 pointer-events-none">
+                    {/* <td colSpan={row.length} className="absolute inset-0 p-0 pointer-events-none">
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </td>
+                    </td> */}
 
                     {Array.isArray(row) &&
                       row.map((cell, cellIndex) => (
                         <td
                           key={cellIndex}
-                          className="relative px-6 py-4 whitespace-nowrap text-sm text-gray-300 group-hover:text-white transition-colors duration-300"
+                          className="relative px-6 py-4 whitespace-nowrap text-center text-sm text-gray-300 group-hover:text-white transition-colors duration-300"
                         >
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center justify-center gap-2">
                             {/* Cell indicator dot (shows on hover) */}
                             <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             <span>{cell}</span>

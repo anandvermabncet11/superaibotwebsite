@@ -1,21 +1,25 @@
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import CandlestickChartIcon from '@mui/icons-material/CandlestickChart';
+import InsightsIcon from '@mui/icons-material/Insights';
 import PaidIcon from "@mui/icons-material/Paid";
+import PieChartIcon from '@mui/icons-material/PieChart';
+import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
+import TimelineIcon from '@mui/icons-material/Timeline';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import copy from "copy-to-clipboard";
 import toast from "react-hot-toast";
-import { endpoint, frontend } from "../utils/APIRoutes";
-import { apiConnectorGet } from "../utils/APIConnector";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import Loader from "../Shared/Loader";
-import PieChartIcon from '@mui/icons-material/PieChart';
-import TimelineIcon from '@mui/icons-material/Timeline';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import InsightsIcon from '@mui/icons-material/Insights';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
-import CandlestickChartIcon from '@mui/icons-material/CandlestickChart';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import { apiConnectorGet } from "../utils/APIConnector";
+import { endpoint, frontend } from "../utils/APIRoutes";
 import { getFloatingValue } from "../utils/utilityFun";
-const Card = ({ title, value, color, icon = "dollar" }) => {
+import tether from "../images/tether.png";
+import Diversity3Icon from "@mui/icons-material/Diversity3";
+
+const Card = ({ title, value, color, icon = "dollar", path, navigate }) => {
   const colors = {
     cyan: {
       gradient: "from-[#0a1219] via-[#0d1519] to-[#0f1b21]",
@@ -101,6 +105,7 @@ const Card = ({ title, value, color, icon = "dollar" }) => {
 
   return (
     <div
+      onClick={() => path && navigate(path)}
       className={`bg-gradient-to-br ${currentColor.gradient} rounded-2xl p-6 border ${currentColor.border} shadow-xl ${currentColor.shadow} relative overflow-hidden group transition-all duration-300`}
     >
 
@@ -161,6 +166,7 @@ const Card = ({ title, value, color, icon = "dollar" }) => {
 
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const functionTOCopy = (value) => {
     copy(value);
     // alert("Copied to clipboard!");
@@ -198,20 +204,16 @@ const Dashboard = () => {
       {/* ===== TOP ===== */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         {/* Current Slab */}
-        <div className="bg-gradient-to-br from-[#0a1219] via-[#0d1519] to-[#0f1b21] rounded-2xl p-6 border border-cyan-400/30 shadow-xl shadow-cyan-400/10 relative overflow-hidden group hover:shadow-cyan-400/20 transition-all duration-300">
+        {/* <div className="bg-gradient-to-br from-[#0a1219] via-[#0d1519] to-[#0f1b21] rounded-2xl p-6 border border-cyan-400/30 shadow-xl shadow-cyan-400/10 relative overflow-hidden group hover:shadow-cyan-400/20 transition-all duration-300">
 
-          {/* Animated background effects */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-400/5 rounded-full blur-3xl group-hover:bg-cyan-400/10 transition-all duration-500"></div>
           <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl"></div>
 
-          {/* Accent line */}
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-cyan-500 to-transparent"></div>
 
-          {/* Decorative corner elements */}
           <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-cyan-400/20 rounded-tr-2xl"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-cyan-400/10 rounded-bl-2xl"></div>
 
-          {/* Content */}
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
@@ -224,14 +226,7 @@ const Dashboard = () => {
               </span>
             </h2>
 
-            {/* <div className="flex items-baseline gap-2">
-              <span className="text-xs font-bold text-white">
-                ${Number(user_profile?.slab_amount || 0)?.toFixed(0)}
-              </span>
-              <span className="text-xs text-gray-500 font-medium">USD</span>
-            </div> */}
-
-            {/* Progress indicator */}
+       
             <div className="mt-4 flex items-center gap-2">
               <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
                 <div
@@ -243,13 +238,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Chart Icon Area */}
           <div className="absolute top-4 right-4 w-20 h-20 flex items-center justify-center">
             <div className="relative">
-              {/* Glow effect behind icon */}
               <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-xl animate-pulse"></div>
 
-              {/* Icon container with gradient border */}
               <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-cyan-400/10 to-transparent p-0.5">
                 <div className="w-full h-full rounded-full bg-[#0d1519] flex items-center justify-center backdrop-blur-sm">
                   <div className="text-cyan-400 transform group-hover:scale-110 transition-transform duration-300">
@@ -258,34 +250,28 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* Orbiting dots */}
               <div className="absolute top-1/2 left-1/2 w-24 h-24 -translate-x-1/2 -translate-y-1/2">
                 <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-cyan-400 rounded-full -translate-x-1/2 animate-ping"></div>
               </div>
             </div>
           </div>
 
-          {/* Shine effect on hover */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/5 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
           </div>
-        </div>
+        </div> */}
 
         {/* Remaining Amount */}
-        <div className="bg-gradient-to-br from-[#1a1406] via-[#0d1519] to-[#1a0f06] rounded-2xl p-6 border border-yellow-400/30 shadow-xl shadow-yellow-400/10 relative overflow-hidden group hover:shadow-yellow-400/20 transition-all duration-300">
+        {/* <div className="bg-gradient-to-br from-[#1a1406] via-[#0d1519] to-[#1a0f06] rounded-2xl p-6 border border-yellow-400/30 shadow-xl shadow-yellow-400/10 relative overflow-hidden group hover:shadow-yellow-400/20 transition-all duration-300">
 
-          {/* Animated background effects */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-yellow-400/5 rounded-full blur-3xl group-hover:bg-yellow-400/10 transition-all duration-500"></div>
           <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl"></div>
 
-          {/* Accent line */}
           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-400 via-amber-500 to-transparent"></div>
 
-          {/* Decorative corner elements */}
           <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-yellow-400/20 rounded-tr-2xl"></div>
           <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-yellow-400/10 rounded-bl-2xl"></div>
 
-          {/* Content */}
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></div>
@@ -302,7 +288,6 @@ const Dashboard = () => {
               <span className="text-sm text-gray-500 font-medium">Your trading amount</span>
             </div>
 
-            {/* Progress indicator */}
             <div className="mt-4 flex items-center gap-2">
               <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
                 <div
@@ -320,13 +305,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Icon Area */}
           <div className="absolute top-4 right-4 w-20 h-20 flex items-center justify-center">
             <div className="relative">
-              {/* Glow effect behind icon */}
               <div className="absolute inset-0 bg-yellow-400/20 rounded-full blur-xl animate-pulse"></div>
 
-              {/* Icon container with gradient border */}
               <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400/10 to-transparent p-0.5">
                 <div className="w-full h-full rounded-full bg-[#0d1519] flex items-center justify-center backdrop-blur-sm">
                   <div className="text-yellow-400 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300">
@@ -335,7 +317,6 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* Orbiting dots */}
               <div className="absolute top-1/2 left-1/2 w-24 h-24 -translate-x-1/2 -translate-y-1/2">
                 <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-yellow-400 rounded-full -translate-x-1/2 opacity-60">
                   <div className="absolute inset-0 bg-yellow-400 rounded-full animate-ping"></div>
@@ -344,20 +325,200 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Shine effect on hover */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/5 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
           </div>
 
-          {/* Warning indicator (if amount is low) */}
           {(Number(user_profile?.slab_amount || 0) - Number(user_profile?.slab_comp_amount || 0)) < 100 && (
             <div className="absolute bottom-2 left-2 flex items-center gap-1">
               <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-pulse"></div>
               <span className="text-xs text-red-400 font-medium">Almost Complete!</span>
             </div>
           )}
-        </div>
+        </div> */}
+        {/* Active Topup & Balance Card */}
+        <div className="bg-gradient-to-br from-[#060d1a] via-[#080f1e] to-[#060a14] rounded-2xl p-6 border border-blue-400/30 shadow-xl shadow-blue-400/10 relative overflow-hidden group hover:shadow-blue-400/20 transition-all duration-300">
 
+          {/* Animated background effects */}
+          <div className="absolute top-0 right-0 w-40 h-40 bg-blue-400/5 rounded-full blur-3xl group-hover:bg-blue-400/10 transition-all duration-500"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl"></div>
+
+          {/* Accent line */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-blue-500 to-transparent"></div>
+
+          {/* Decorative corner elements */}
+          <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-blue-400/20 rounded-tr-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-blue-400/10 rounded-bl-2xl"></div>
+
+          {/* Shine effect on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/5 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+          </div>
+
+          {/* Particles */}
+          <div className="absolute top-10 left-10 w-1 h-1 bg-cyan-400 rounded-full opacity-60 animate-ping"></div>
+          <div className="absolute bottom-20 right-16 w-1 h-1 bg-blue-300 rounded-full opacity-60 animate-ping" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-20 w-1 h-1 bg-blue-500 rounded-full opacity-60 animate-ping" style={{ animationDelay: '2s' }}></div>
+
+          {/* ===== TOP SECTION - Active Topup ===== */}
+          <div className="relative z-10 mb-5">
+            <div className="flex items-start justify-between">
+              <div>
+                {/* Label */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+                  <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">My Topup Wallet Balance</p>
+                </div>
+
+                {/* Value */}
+                <h2 className="text-3xl font-bold mb-1">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500">
+                    {getFloatingValue(user_profile?.tr03_topup_wallet)}USD
+                  </span>
+                </h2>
+
+                {/* Tether icon row */}
+                <div className="flex items-center gap-2 mt-1">
+                  <div className=" rounded-full  flex items-center justify-center ">
+                    <img src={tether} alt="" className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs text-gray-500 font-medium">Active Topup</span>
+                </div>
+              </div>
+
+              {/* Deposit Button with icon glow area */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl animate-pulse"></div>
+                <button
+                  onClick={() => navigate("/fund-transfer-to-topup-wallet")}
+                  className="relative bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-400 hover:to-cyan-300 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-lg shadow-blue-500/40 transition-all duration-300 hover:scale-105 hover:shadow-blue-400/60 group/btn overflow-hidden"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-500"></div>
+                  </div>
+                  <span className="relative z-10">Topup</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Notice text */}
+            <div className="mt-4 bg-blue-950/30 rounded-lg py-2 px-3 border border-blue-400/10">
+              <p className="text-blue-400/70 text-xs text-center italic">
+                Topup/Re-Topup Your Account to continue earning profit &amp; Rewards
+              </p>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="relative z-10 flex items-center gap-3 mb-5">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent"></div>
+          </div>
+
+          {/* ===== MIDDLE SECTION - Fund Wallet (new) ===== */}
+          <div className="relative z-10 mb-5">
+            <div className="flex items-start justify-between">
+              <div>
+                {/* Label */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                  <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">My Fund Wallet Balancet</p>
+                </div>
+
+                {/* Value */}
+                <h2 className="text-2xl font-bold mb-1">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-green-400 to-emerald-500">
+                    ${getFloatingValue(user_profile?.tr03_fund_wallet)}USD
+                  </span>
+                </h2>
+
+                {/* Tether icon row */}
+                <div className="flex items-center gap-2 mt-1">
+                  <div className=" rounded-full  flex items-center justify-center ">
+                    <img src={tether} alt="" className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs text-gray-500 font-medium">Available Fund</span>
+                </div>
+              </div>
+
+              {/* Transfer Button */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-green-400/20 rounded-full blur-xl animate-pulse"></div>
+                <button
+                  onClick={() => navigate("/topup_data")}
+                  className="relative bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-lg shadow-green-500/40 transition-all duration-300 hover:scale-105 hover:shadow-green-400/60 group/btn overflow-hidden"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-500"></div>
+                  </div>
+                  <span className="relative z-10">Deposit</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ===== BOTTOM SECTION - Balance ===== */}
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <div>
+                {/* Label */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></div>
+                  <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">Current Balance</p>
+                </div>
+
+                {/* Value */}
+                <h2 className="text-3xl font-bold mb-1">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-500">
+                    {getFloatingValue(user_profile?.tr03_inc_wallet)} USD
+                  </span>
+                </h2>
+
+                {/* Tether icon row */}
+                <div className="flex items-center gap-2 mt-1">
+                  <div className=" rounded-full  flex items-center justify-center ">
+                    <img src={tether} alt="" className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs text-gray-500 font-medium">Wallet Balance</span>
+                </div>
+              </div>
+
+              {/* Withdrawal Button */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-yellow-400/20 rounded-full blur-xl animate-pulse"></div>
+                <button
+                  // onClick={() => navigate("/withdrawal")}
+                  className="relative bg-gradient-to-r from-yellow-400 to-amber-400 hover:from-yellow-300 hover:to-amber-300 text-black font-bold text-sm px-5 py-2 rounded-full shadow-lg shadow-yellow-400/40 transition-all duration-300 hover:scale-105 hover:shadow-yellow-300/60 group/btn overflow-hidden"
+                >
+                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-500"></div>
+                  </div>
+                  <span className="relative z-10">Withdrawal</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mt-4 flex items-center gap-2">
+              <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-full transition-all duration-1000 ease-out shadow-lg shadow-yellow-400/50"
+                  style={{
+                    width: `${Number(user_profile?.tr03_inc_wallet || 0) > 0 ? "100" : "0"}%`
+                  }}
+                ></div>
+              </div>
+              <span className="text-xs text-yellow-400 font-semibold">
+                {Number(user_profile?.tr03_inc_wallet || 0) > 0 ? "100%" : "0%"}
+              </span>
+            </div>
+          </div>
+
+        </div>
         {/* Referral */}
         <div className="bg-gradient-to-br from-[#060f1a] via-[#0d1519] to-[#0a1420] rounded-2xl p-6 border border-blue-400/30 shadow-xl shadow-blue-400/10 relative overflow-hidden group hover:shadow-blue-400/20 transition-all duration-300">
 
@@ -418,9 +579,7 @@ const Dashboard = () => {
                   functionTOCopy(
                     frontend +
                     "/register?startapp=" +
-                    user_profile?.lgn_cust_id +
-                    "&id=" +
-                    user_profile?.lgn_email
+                    user_profile?.lgn_cust_id
                   )
                 }
                 className="relative px-6 py-2.5 rounded-lg font-semibold text-sm overflow-hidden group/btn transition-all duration-300 hover:scale-105"
@@ -474,6 +633,125 @@ const Dashboard = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/5 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
           </div>
         </div>
+
+        {/* Team Stats Card */}
+        <div className="bg-gradient-to-br from-[#060d1a] via-[#0a1220] to-[#060f1a] rounded-2xl p-6 border border-blue-500/30 shadow-xl shadow-blue-500/10 relative overflow-hidden group hover:shadow-blue-500/20 transition-all duration-300 mb-6">
+
+          {/* Animated background effects */}
+          <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl group-hover:bg-blue-500/10 transition-all duration-500"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-yellow-500/5 rounded-full blur-2xl"></div>
+
+          {/* Accent line */}
+          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-400 via-blue-500 to-transparent"></div>
+
+          {/* Decorative corner elements */}
+          <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-blue-400/20 rounded-tr-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-yellow-400/10 rounded-bl-2xl"></div>
+
+          {/* Team Icon */}
+          <div className="flex flex-col items-center mb-6">
+            <div className="relative">
+              <div className="absolute inset-0 bg-yellow-400/20 rounded-full blur-xl animate-pulse"></div>
+              <div className="flex items-center justify-center text-[#FFD700]">
+                <Diversity3Icon className="!text-9xl" />
+              </div>
+            </div>
+          </div>
+
+          {/* Stats List */}
+          <div className="relative z-10 space-y-3">
+            {/* Direct Team */}
+            <div className="flex items-center justify-between py-2 border-b border-blue-400/10">
+              <div className="flex items-center gap-2 text-[#FFD700]" >
+                <Diversity3Icon />
+                <span className="text-gray-300 text-sm font-medium">My Total Direct Member</span>
+              </div>
+              <span className="text-blue-500 font-bold text-sm  underline" onClick={() => navigate("/referral")}>{user_profile?.tr03_dir_mem || 0}</span>
+            </div>
+            <div className="flex items-center justify-between py-2 border-b border-blue-400/10">
+              <div className="flex items-center gap-2 text-[#FFD700]" >
+                <Diversity3Icon />
+                <span className="text-gray-300 text-sm font-medium">My Total Team Member</span>
+              </div>
+              <span className="text-blue-500 font-bold text-sm underline" onClick={() => navigate("/downline")}>{user_profile?.tr03_team_mem || 0}</span>
+            </div>
+
+            {/* Direct TopUp Member */}
+            {/* <div className="flex items-center justify-between py-2 border-b border-blue-400/10">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                </svg>
+                <span className="text-gray-300 text-sm font-medium">Direct TopUp Member</span>
+              </div>
+              <span className="text-white font-bold text-sm">{user_profile?.tr03_dir_topup_mem || 0}</span>
+            </div> */}
+
+            {/* Total Income */}
+            {/* <div className="flex items-center justify-between py-2 border-b border-blue-400/10">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                </svg>
+                <span className="text-gray-300 text-sm font-medium">Total Income</span>
+              </div>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500 font-bold text-sm">
+                ${getFloatingValue(dashboard?.total_income || 0)}
+              </span>
+            </div> */}
+
+            {/* TopUp Amount */}
+            {/* <div className="flex items-center justify-between py-2 border-b border-blue-400/10">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M4 10h3v7H4zm6.5-6h3v13h-3zM17 7h3v10h-3z" />
+                </svg>
+                <span className="text-gray-300 text-sm font-medium">TopUp Amount</span>
+              </div>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500 font-bold text-sm">
+                ${getFloatingValue(user_profile?.tr03_topup_wallet || 0)}
+              </span>
+            </div> */}
+
+            {/* Team Income */}
+            {/* <div className="flex items-center justify-between py-2">
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
+                <span className="text-gray-300 text-sm font-medium">Team Income</span>
+              </div>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-pink-500 font-bold text-sm">
+                ${getFloatingValue(dashboard?.team_income || 0)}
+              </span>
+            </div> */}
+          </div>
+
+          {/* Particles effect */}
+          <div className="absolute top-10 left-10 w-1 h-1 bg-yellow-400 rounded-full opacity-60 animate-ping"></div>
+          <div className="absolute bottom-20 right-16 w-1 h-1 bg-blue-300 rounded-full opacity-60 animate-ping" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute top-1/2 left-20 w-1 h-1 bg-yellow-500 rounded-full opacity-60 animate-ping" style={{ animationDelay: '2s' }}></div>
+
+          {/* Extra Particles (added) */}
+          <div className="absolute top-6 right-8 w-1.5 h-1.5 bg-cyan-400 rounded-full opacity-70 animate-ping" style={{ animationDelay: '0.4s' }}></div>
+          <div className="absolute bottom-6 left-16 w-2 h-2 bg-purple-400 rounded-full opacity-60 animate-pulse" style={{ animationDelay: '0.9s' }}></div>
+          <div className="absolute top-1/3 right-4 w-1 h-1 bg-blue-200 rounded-full opacity-50 animate-ping" style={{ animationDelay: '1.6s' }}></div>
+
+          {/* Shine effect on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/5 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+          </div>
+
+          {/* Signature / watermark */}
+          <div className="absolute bottom-3 right-3 text-xs text-white/20 italic tracking-wide rotate-[-6deg] pointer-events-none">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-white/10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Verified Team Stats</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ===== GRID ===== */}
@@ -482,11 +760,15 @@ const Dashboard = () => {
           title="Current Wallet Balance"
           value={`$${getFloatingValue(user_profile?.tr03_inc_wallet)}`}
           color="cyan"
+          path=""
+          navigate={navigate}
         />
         <Card
           title="Referral Bonus"
           value={`$${getFloatingValue(dashboard?.referral_income)}`}
           color="red"
+          path="/income/direct"
+          navigate={navigate}
         />
         {/* <Card title="Total Capping" value="3X" color="green" /> */}
         {/* <Card title="Profit Ratio" value="$ 0" color="yellow" /> */}
@@ -495,30 +777,40 @@ const Dashboard = () => {
           title="Level Bonus"
           value={`$${getFloatingValue(dashboard?.level_bonus || 0)}`}
           color="cyan"
+          path="/income/level"
+          navigate={navigate}
         />
         <Card
           title="ROI Bonus"
           value={`$${getFloatingValue(dashboard?.roi_bonus || 0)}`}
           color="cyan"
+          path="/income/roi"
+          navigate={navigate}
         />
         <Card
           title="Reward Bonus"
           value={`$${getFloatingValue(dashboard?.reward_bonus || 0)}`}
           color="red"
+          path="/income/reward"
+          navigate={navigate}
         />
         <Card
           title="Salary Bonus"
           value={`$${getFloatingValue(dashboard?.salary_bonus || 0)}`}
           color="green"
+          path="/income/salary"
+          navigate={navigate}
         />
         <Card
           title="Total Income"
           value={`$${getFloatingValue(dashboard?.total_income || 0)}`}
           color="yellow"
+          path=""
+          navigate={navigate}
         />
 
         {/* <Card title="Total Withdrawal" value="$ 0" color="cyan" icon="user" /> */}
-        <Card
+        {/* <Card
           title="Direct Member"
           value={user_profile?.tr03_dir_mem || 0}
           color="red"
@@ -528,7 +820,7 @@ const Dashboard = () => {
           value={user_profile?.tr03_team_mem || 0}
           color="green"
           icon="user"
-        />
+        /> */}
         {/* <Card title="Downline Team" value="0" color="yellow" /> */}
 
         {/* <Card

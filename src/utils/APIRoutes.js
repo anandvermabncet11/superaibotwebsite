@@ -1,5 +1,5 @@
-// export const domain = "http://10.15.40.149:9010";
-export const domain = "https://backend.fastro.info";
+export const domain = "http://10.15.40.149:9010";
+// export const domain = "https://backend.fastro.info";
 export const frontend = "https://trade4you.co.com";
 // export const frontend = "https://hyperchainx.live";
 export const dollar = "$";
@@ -14,6 +14,11 @@ export const endpoint = {
   get_spon_name: `${domain}/api/v9/member-name-by-cust-id`,
   profile_api: ` ${domain}/api/v9/member-profile-details`,
   user_dashboard_api: `${domain}/api/v9/member-dashboard-details`,
+  get_topup_qr: `${domain}/api/v9/get-topup-qr`,
+  member_self_topup: `${domain}/api/v9/member-self-topup`,
+  get_report_details: `${domain}/api/v9/get-report-details`,
+  team_data_api: `${domain}/api/v9/get-member-downline`,
+  member_fund_transfer: `${domain}/api/v9/member-fund-transfer-p2p`,
 
   //////////////////////////////////////////////////
 
@@ -21,8 +26,6 @@ export const endpoint = {
 
   general_contact_address_api: `${domain}/api/v9/get-api-general-data`,
   paying_dummy_api: `${domain}/api/v9/activation-dummy-request`,
-  team_data_api: `${domain}/api/v9/get-team-data`,
-  topup_data: `${domain}/api/v9/get-topup-details`,
   team_topup_data: `${domain}/api/v9/get-team-topup-details`,
   paying_api: `${domain}/api/v9/activation-request`,
   roi_income_api: `${domain}/api/v9/get-roi-income-details`,

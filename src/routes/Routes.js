@@ -21,6 +21,7 @@ import Team from "../dashboard/pages/TeamTree/Team";
 import TopupWithContWithoutPull from "../dashboard/pages/Topup/TopupWithContWithoutPull";
 import Wallet from "../dashboard/pages/Wallet";
 import Withdrawal from "../dashboard/pages/Withdrawal";
+import FundTransferToToupWallet from "../dashboard/pages/Topup/FundTransferToToupWallet";
 
 export const routes = [
   {
@@ -64,6 +65,14 @@ export const routes = [
     element: (
       <MainLayout>
         <TopupWithContWithoutPull />{" "}
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/fund-transfer-to-topup-wallet",
+    element: (
+      <MainLayout>
+        <FundTransferToToupWallet />{" "}
       </MainLayout>
     ),
   },

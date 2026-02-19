@@ -1,13 +1,13 @@
-import * as React from 'react';
-import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import PersonIcon from '@mui/icons-material/Person';
+import FaceIcon from '@mui/icons-material/Face';
+import HomeIcon from '@mui/icons-material/Home';
 import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import * as React from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
 const MainLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,9 +16,10 @@ const MainLayout = ({ children }) => {
   // Navigation items
   const navItems = [
     { label: "Home", icon: <HomeIcon />, path: "/dashboard" },
-    // { label: "Activation", icon: <AccountBalanceWalletIcon />, path: "/topup_data" },
-    { label: "Reports", icon: <BarChartIcon />, path: "/activation" },
-    { label: "Referral", icon: <AccountTreeIcon />, path: "/referral" },
+    { label: "Deposit", icon: <AccountBalanceWalletIcon />, path: "/topup_data" },
+    { label: "Topup", icon: <BarChartIcon />, path: "/fund-transfer-to-topup-wallet" },
+    { label: "Withdrawal", icon: <AccountTreeIcon />, path: "" },
+    { label: "Profile", icon: <FaceIcon />, path: "" },
   ];
 
   // Set active tab based on current path
